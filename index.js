@@ -24,7 +24,7 @@ class View extends BaseCommand {
     async execute() {
        const [packageName, version] = this.info.split('@')
        const res =  await axios.get(`http://registry.yarnpkg.com/${packageName}/${version || ''}`)
-       console.log(res.data)
+       console.log(res.data, '----')
     }
 }
 
