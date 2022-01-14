@@ -1,6 +1,6 @@
 {
   "name": "yarn-plugin-docs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "bundles/@yarnpkg/plugin-docs.js",
   "license": "MIT",
   "dependencies": {
