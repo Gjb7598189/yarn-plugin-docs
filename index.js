@@ -27,8 +27,8 @@ class Docs extends BaseCommand {
         打开包对应的文档地址
         `,
         examples: [[
-          `Open the search window`,
-          `yarn search`,
+          `Open the document page of package`,
+          `yarn docs history,lodash,react`,
         ]],
       });
 
