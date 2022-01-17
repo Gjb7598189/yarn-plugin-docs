@@ -30,11 +30,7 @@ class Docs extends BaseCommand {
     }
 
     async getDocs (pkg) {
-        const loading = ora({
-            text: '请稍等...'
-        }).start()
         const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
-        loading.stop()
         const pckmnt = res.data
         const url = this.getDocsUrl(pckmnt)
         !!url && await opener(url)
