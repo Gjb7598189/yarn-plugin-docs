@@ -9,10 +9,3 @@ export function hostedFromMani(mani) {
   
     return (rurl && hostedGitInfo.fromUrl(rurl.replace(/^git\+/, ''))) || null
 }
-
-export const urlCache = {
-    info: {},
-    setInfo(key, url) {
-        urlCache.info[key] = url
-    }
-}

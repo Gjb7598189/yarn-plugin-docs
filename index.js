@@ -3,7 +3,7 @@ import {BaseCommand} from '@yarnpkg/cli'
 import { Option, Command }  from 'clipanion'
 import axios from 'axios'
 import semver from 'semver'
-import { urlCache, hostedFromMani } from './utils'
+import { hostedFromMani } from './utils'
 
 class Docs extends BaseCommand {
 
@@ -30,16 +30,14 @@ class Docs extends BaseCommand {
     }
 
     async getDocs (pkg) {
-        let url
-        if (urlCache.info?.[pkg]) {
-            url = urlCache.info?.[pkg]
-        } else {
-            const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
-            const pckmnt = res.data
-            url = this.getDocsUrl(pckmnt)
-            urlCache.setInfo(pkg, url)
-        }
-        await opener(url)
+        const loading = ora({
+            text: '请稍等...'
+        }).start()
+        const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
+        loading.stop()
+        const pckmnt = res.data
+        const url = this.getDocsUrl(pckmnt)
+        !!url && await opener(url)
     }
     
     getDocsUrl (mani) {
