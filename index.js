@@ -33,6 +33,8 @@ class Docs extends BaseCommand {
       });
 
     packages = Option.String()
+
+    cache = {}
     async execute() {
         if (!this.packages) return
         const list = this.packages.split(',')
@@ -40,9 +42,14 @@ class Docs extends BaseCommand {
     }
 
     async getDocs (pkg) {
-        const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
-        const pckmnt = res.data
-        const url = this.getDocsUrl(pckmnt)
+        let url
+        if (this.cache[pkg]) {
+            url = this.cache[pkg]
+        } else {
+            const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
+            const pckmnt = res.data
+            url = this.cache[pkg] = this.getDocsUrl(pckmnt)
+        }
         await opener(url)
     }
     
