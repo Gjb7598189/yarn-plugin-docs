@@ -3,18 +3,7 @@ import {BaseCommand} from '@yarnpkg/cli'
 import { Option, Command }  from 'clipanion'
 import axios from 'axios'
 import semver from 'semver'
-import hostedGitInfo from 'hosted-git-info'
-
-
-function hostedFromMani(mani) {
-    const r = mani.repository
-    const rurl = !r ? null
-      : typeof r === 'string' ? r
-      : typeof r === 'object' && typeof r.url === 'string' ? r.url
-      : null
-  
-    return (rurl && hostedGitInfo.fromUrl(rurl.replace(/^git\+/, ''))) || null
-}
+import { urlCache, hostedFromMani } from './utils'
 
 class Docs extends BaseCommand {
 
@@ -32,8 +21,6 @@ class Docs extends BaseCommand {
         ]],
       });
 
-    static urlCache = {}
-
     packages = Option.String()
 
     async execute() {
@@ -44,12 +31,13 @@ class Docs extends BaseCommand {
 
     async getDocs (pkg) {
         let url
-        if (Docs.urlCache[pkg]) {
-            url = Docs.urlCache[pkg]
+        if (urlCache.info?.[pkg]) {
+            url = urlCache.info?.[pkg]
         } else {
             const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
             const pckmnt = res.data
-            url = Docs.urlCache[pkg] = this.getDocsUrl(pckmnt)
+            url = this.getDocsUrl(pckmnt)
+            urlCache.setInfo(pkg, url)
         }
         await opener(url)
     }
