@@ -16,8 +16,6 @@ function hostedFromMani(mani) {
     return (rurl && hostedGitInfo.fromUrl(rurl.replace(/^git\+/, ''))) || null
 }
 
-const urlCache = {}
-
 class Docs extends BaseCommand {
 
     static paths = [['docs']]
@@ -34,6 +32,8 @@ class Docs extends BaseCommand {
         ]],
       });
 
+    static urlCache = {}
+
     packages = Option.String()
 
     async execute() {
@@ -44,12 +44,12 @@ class Docs extends BaseCommand {
 
     async getDocs (pkg) {
         let url
-        if (urlCache[pkg]) {
-            url = urlCache[pkg]
+        if (Docs.urlCache[pkg]) {
+            url = Docs.urlCache[pkg]
         } else {
             const res = await axios(`http://registry.yarnpkg.com/${pkg}`)
             const pckmnt = res.data
-            url = urlCache[pkg] = this.getDocsUrl(pckmnt)
+            url = Docs.urlCache[pkg] = this.getDocsUrl(pckmnt)
         }
         await opener(url)
     }
