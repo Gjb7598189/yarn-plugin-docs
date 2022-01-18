@@ -11,6 +11,7 @@
     "clipanion": "^3.2.0-rc.5",
     "hosted-git-info": "^4.1.0",
     "opener": "^1.5.2",
+    "semver": "^7.3.5",
     "undici": "^4.12.1"
   },
   "scripts": {
