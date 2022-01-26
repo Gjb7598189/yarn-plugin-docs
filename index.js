@@ -3,7 +3,6 @@ import {BaseCommand} from '@yarnpkg/cli'
 import { Option, Command }  from 'clipanion'
 import axios from 'axios'
 import { hostedFromMani } from './utils'
-
 class Docs extends BaseCommand {
 
     static paths = [['docs']]
